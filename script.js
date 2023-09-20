@@ -1,3 +1,27 @@
+const template = document.querySelector('#item-template');
+const sectionShopItems = document.querySelector('#shop-items');
+
+
+function templateItems(items) {
+  items.forEach(item => {
+    const elem = template.content.cloneNode(true);
+    elem.querySelector('h1').textContent = item.title;
+    elem.querySelector('p').textContent = item.description;
+    elem.querySelector('img').src = item.img;
+    elem.querySelector('.price').textContent = item.price;
+
+    const tagsBox = elem.querySelector('.tags');
+
+    item.tags.forEach(tag => {
+      const tagElement = document.createElement('div');
+      tagElement.textContent = tag;
+      tagsBox.append(tagElement);
+    });
+
+    sectionShopItems.append(elem);
+  });
+}
+
 const items = [
   {
     title: "Игрушка мячик",
@@ -84,3 +108,27 @@ const items = [
     img: "./img/12.jpeg",
   },
 ];
+
+templateItems(items);
+
+
+const searchInput = document.querySelector('#search-input');
+const searchButton = document.querySelector('#search-btn');
+const nothingFound = document.querySelector('#nothing-found');
+
+searchButton.addEventListener('click', function() {
+  const inputValue = searchInput.value.toLowerCase().trim();
+  const searchItems = items.filter(item => item.title.toLowerCase().includes(inputValue));
+
+  sectionShopItems.innerHTML = "";
+  nothingFound.textContent = "";
+
+  if (searchItems.length > 0) {
+    templateItems(searchItems);
+  } else {
+    nothingFound.textContent = 'Ничего не найдено';
+  }
+
+  searchInput.value = "";
+});
+
